@@ -1,0 +1,112 @@
+// 2K screen layout overrides for Hugo Stack
+// 生效范围：仅在 2xl（>= 1536px）启用，适合 2K / 4K 等大屏窗口。
+// 调整方式：以后主要改下面这一组变量，不需要反复改选择器。
+
+:root {
+    @include respond(2xl) {
+        // 整个页面主容器的最大宽度。
+        // 更大：整体更舒展，文章区通常也会更宽。
+        // 更小：整体更紧凑。
+        --layout-2k-container-max-width: 2000px;
+
+        // 页面左右留白，对应主容器的 padding-left / padding-right。
+        // 更大：内容离屏幕边缘更远。
+        // 更小：整体更贴边。
+        --layout-2k-page-padding: 24px;
+
+        // 左栏、正文、右栏三列之间的水平间距。
+        // 更大：三栏更分散。
+        // 更小：三栏更紧凑，正文通常会更宽一点。
+        --layout-2k-column-gap: 40px;
+
+        // 左侧栏的基础宽度。
+        // 这是左栏在不做位置偏移时的参考宽度。
+        --layout-2k-left-sidebar-width: 320px;
+
+        // 右侧栏的基础宽度。
+        // 这是右栏在不做位置偏移时的参考宽度。
+        --layout-2k-right-sidebar-width: 360px;
+
+        // 2K 屏幕下的头像尺寸。
+        // 如果你希望大屏头像更突出，就把这个值调大。
+        --layout-2k-avatar-size: 256px;
+
+        // 左侧栏偏移量。
+        // 更负：更靠左，同时会减少左栏占用的布局宽度，让正文自动变宽。
+        --layout-2k-left-sidebar-offset: -56px;
+
+        // 右侧栏偏移量。
+        // 更大：更靠右，同时会减少右栏占用的布局宽度，让正文自动变宽。
+        --layout-2k-right-sidebar-offset: 40px;
+
+        // 左栏在布局中真正占用的宽度。
+        // 因为左移是负数，所以这里用“基础宽度 + 偏移量”。
+        --layout-2k-left-sidebar-effective-width: calc(
+            var(--layout-2k-left-sidebar-width) + var(--layout-2k-left-sidebar-offset)
+        );
+
+        // 右栏在布局中真正占用的宽度。
+        // 因为右移是正数，所以这里用“基础宽度 - 偏移量”。
+        --layout-2k-right-sidebar-effective-width: calc(
+            var(--layout-2k-right-sidebar-width) - var(--layout-2k-right-sidebar-offset)
+        );
+    }
+}
+
+// Extended 模式：有左栏 + 正文 + 右栏
+.container.extended {
+    @include respond(2xl) {
+        max-width: var(--layout-2k-container-max-width);
+        --left-sidebar-max-width: var(--layout-2k-left-sidebar-effective-width);
+        --right-sidebar-max-width: var(--layout-2k-right-sidebar-effective-width);
+    }
+}
+
+// Compact 模式：通常只有左栏 + 正文
+.container.compact {
+    @include respond(2xl) {
+        max-width: var(--layout-2k-container-max-width);
+        --left-sidebar-max-width: var(--layout-2k-left-sidebar-effective-width);
+    }
+}
+
+// 主内容容器：控制列间距、左右边距
+.main-container {
+    @include respond(2xl) {
+        gap: var(--layout-2k-column-gap);
+        padding-left: var(--layout-2k-page-padding);
+        padding-right: var(--layout-2k-page-padding);
+    }
+}
+
+// 左栏位置微调
+.left-sidebar {
+    @include respond(2xl) {
+        --sidebar-avatar-size: var(--layout-2k-avatar-size);
+        transform: translateX(var(--layout-2k-left-sidebar-offset));
+    }
+}
+
+// 兼容 compact 模式，避免主题的较小默认头像把这里的值覆盖掉。
+.left-sidebar.compact {
+    @include respond(2xl) {
+        --sidebar-avatar-size: var(--layout-2k-avatar-size);
+    }
+}
+
+// 右栏位置微调
+.right-sidebar {
+    @include respond(2xl) {
+        transform: translateX(var(--layout-2k-right-sidebar-offset));
+    }
+}
+
+// 说明：
+// 1. 正文区宽度 = 主容器宽度 - 左栏有效宽度 - 右栏有效宽度 - 列间距 - 左右 padding。
+// 2. 如果你想让正文更宽，优先改这三个值：
+//    --layout-2k-container-max-width
+//    --layout-2k-left-sidebar-width
+//    --layout-2k-right-sidebar-width
+// 3. 现在偏移量也会参与布局计算，所以改这两个值时，正文会自动联动：
+//    --layout-2k-left-sidebar-offset
+//    --layout-2k-right-sidebar-offset
