@@ -159,17 +159,17 @@ SortBy         = "default"
         siteName             = ""  # You must insert a unique identifier here matching the one you registered (See https://cactus.chat/docs/getting-started/quick-start/#register-your-site)
 
     [comments.giscus]
-        repo             = ""
-        repoID           = ""
-        category         = ""
-        categoryID       = ""
-        mapping          = "title"
+        repo             = "Life-Cai/BLOG"
+        repoID           = "R_kgDOR6NtmA"
+        category         = "Announcements"
+        categoryID       = "DIC_kwDOR6NtmM4C8d1b"
+        mapping          = "pathname"
         lightTheme       = "light"
         darkTheme        = "dark_dimmed"
-        reactionsEnabled = 1
+        reactionsEnabled = 0
         emitMetadata     = 0
-        inputPosition    = "top"
-        lang             = "en"
+        inputPosition    = "bottom"
+        lang             = "zh-CN"
         strict           = 0
         loading          = "lazy"
 
